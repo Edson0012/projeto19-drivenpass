@@ -16,10 +16,10 @@ export async function singUpPost(req: Request, res: Response) {
 }
 
 export async function signInPost(req: Request, res: Response){
-  const { email, password } = req.body as SignUpParams;
+  const user = req.body;
   
   try {
-    const result = await authenticationService.signUp(email, password);
+    const result = await authenticationService.signIn(user);
 
     return res.status(httpStatus.OK).send(result);
   } catch (error) {

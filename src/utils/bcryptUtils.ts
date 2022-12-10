@@ -9,8 +9,10 @@ export async function encryptPassword(password: string) {
 }
 
 export function checkPassword(password: string, hashedPassword: string) {
-  if (!bcrypt.compareSync(password, hashedPassword))
-    throw unauthorizedError("Email or password");
+  const passwordCrypt = bcrypt.compareSync(password, hashedPassword);
+  if (!passwordCrypt) throw unauthorizedError("Email or password");
+
+  return passwordCrypt;
 }
 
 const cryptoUtils = {

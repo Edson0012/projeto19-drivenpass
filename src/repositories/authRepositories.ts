@@ -15,9 +15,16 @@ return prisma.user.create({
 })
 }
 
+async function findUser(email: string) {
+ return prisma.user.findUnique({
+  where:{ email }
+})
+};
+
 const authenticationRepositories = {
   findByEmailUser,
-  createUser
+  createUser,
+  findUser
 };
 
 export default authenticationRepositories;
