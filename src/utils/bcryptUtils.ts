@@ -15,9 +15,9 @@ export function checkPassword(password: string, hashedPassword: string) {
   return passwordCrypt;
 }
 
-const cryptoUtils = {
+const bcryptoUtils = {
     encryptPassword,
     checkPassword
 }
 
-export default cryptoUtils;
+export default bcryptoUtils;
