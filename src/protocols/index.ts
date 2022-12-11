@@ -3,8 +3,9 @@ export type SignInParams = {
     password: string
 }
 
-export type IdParams = {
-    id: number
+export type Body = {
+    name: string,
+    password: string
 }
 
 export type SignUpParams = Pick<SignInParams, "email" | "password">

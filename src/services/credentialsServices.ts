@@ -30,8 +30,8 @@ async function allCredentials(userId: number){
   return userAllCrendentials;
 };
 
-export async function fetchCredentialById(userId: number, id: number) {
-    const credential = await credentialsRepositories.findCredentialById(userId, id);
+async function fetchCredentialById(userId: number, id: number) {
+    const credential = await credentialsRepositories.findCredentialByIdAndUserId(userId, id);
   
     if(!credential) throw notFoundError("credential not found")
 
@@ -43,12 +43,23 @@ export async function fetchCredentialById(userId: number, id: number) {
 
     return credentialById
 }
-  
+ 
+async function deleteCredential( userId: number, id: number ){
+    if(!id) throw notFoundError("credential not found");
+
+    const credentialById = await credentialsRepositories.findCredencialById(id);
+
+    if(credentialById?.userId === userId) throw notFoundError("credential not found");
+
+
+    return await credentialsRepositories.deleteCredentialByIdAndUserId(userId, id);
+}
 
 const credentialsService = {
     createCredentials,
     allCredentials,
-    fetchCredentialById
+    fetchCredentialById,
+    deleteCredential
 }
 
 export default credentialsService

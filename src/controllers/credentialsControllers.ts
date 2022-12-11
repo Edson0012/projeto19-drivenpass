@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
-import { IdParams } from "../protocols";
-import credentialsService from "../services/credentialsService";
+import credentialsService from "../services/credentialsServices";
 
 export async function postCredentialsByUser( req: Request, res: Response ) {
   const credentials = req.body;
@@ -48,6 +47,24 @@ export async function getCredentialById(req: Request, res: Response) {
     const credential = await credentialsService.fetchCredentialById(user.id, id)
 
     res.status(200).send(credential);
+  } catch (error: any) {
+    if(error.type === "error_not_found"){
+      return res.status(httpStatus.NOT_FOUND).send(error.message);
+    }
+
+    return res.status(httpStatus.BAD_REQUEST).send(error.message);
+  }
+}
+
+export async function deleteCredentialById(req: Request, res: Response) {
+  const id = Number(req.params.id);
+  const { user } = res.locals;
+
+  try {
+    
+    await credentialsService.deleteCredential(user.id, id)
+
+    res.status(httpStatus.OK).send("Credencial Deleted");
   } catch (error: any) {
     if(error.type === "error_not_found"){
       return res.status(httpStatus.NOT_FOUND).send(error.message);
