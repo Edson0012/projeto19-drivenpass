@@ -14,4 +14,12 @@ export const connection = new Pool({
 // Prisma Client
 const { PrismaClient } = pkg;
 
-export const prisma = new PrismaClient(); 
+export let prisma = new PrismaClient(); 
+
+export function connectDb(): void{
+  prisma;
+}
+
+export async function disconnectDB(): Promise<void>{
+ await prisma?.$disconnect();
+}

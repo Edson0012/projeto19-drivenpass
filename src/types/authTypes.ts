@@ -1,3 +1,6 @@
 import { User } from "@prisma/client";
 
-export type userBody = Pick<User , "email" | "password">
+export type signInSchema = Pick<User , "email" | "password">
+
+
+export type signUpSchema = Pick<User , "email" | "password">

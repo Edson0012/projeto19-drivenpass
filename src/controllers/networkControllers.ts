@@ -13,7 +13,7 @@ export async function postRegisterWifi(req: Request, res:Response) {
 
         return res.status(httpStatus.OK).send("created");
 
-    }catch (error: any){
+    }catch (error){
 
         if(error.type === "error_conflict"){
             return res.status(httpStatus.CONFLICT).send(error.message);
@@ -32,7 +32,7 @@ export async function getAllNetworks(req: Request, res: Response){
 
         return res.status(httpStatus.OK).send(allWiFi);
 
-    }catch (error: any) {
+    }catch (error) {
 
         if(error.type === "error_not_found"){
             return res.status(httpStatus.NOT_FOUND).send(error.message);
@@ -51,7 +51,7 @@ export async function getNetworksById ( req: Request, res: Response ) {
 
         return res.status(httpStatus.OK).send(wirelessById)
 
-    }catch (error: any){
+    }catch (error){
 
         if(error.type === "error_not_found"){
             return res.status(httpStatus.NOT_FOUND).send(error.message);
@@ -71,7 +71,7 @@ export async function deleteNetworkByIdAndUserId ( req: Request, res:Response ){
 
         return res.status(httpStatus.OK).send("deleted");
 
-    }catch(error: any){
+    }catch(error){
 
         if(error.type === "error_not_found"){
             return res.status(httpStatus.NOT_FOUND).send(error.message);

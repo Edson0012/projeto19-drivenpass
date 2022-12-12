@@ -4,34 +4,35 @@ import { conflictError, notFoundError, unauthorizedError } from "../../middlewar
 import cryptoUtils from "../../utils/bcryptUtils";
 import * as authTypes from "../../types/authTypes";
 import utilsToken from "../../utils/tokenUtils";
+import { exclude } from "../../utils/prismaUtils";
 
 async function signUp(email: string, password: string){
-  if(!email || !password) throw notFoundError("requires email and password");
 
   const userEmail = await authenticationRepositories.findByEmailUser(email);
-  if(userEmail) throw unauthorizedError("email already exists");
+  if(userEmail) throw unauthorizedError("email");
   
   const hashedPassword = await cryptoUtils.encryptPassword(password);
 
-  const user = await authenticationRepositories.createUser(email, hashedPassword);
-
-  return user;
+  return authenticationRepositories.createUser(email, hashedPassword);
 };
 
-async function signIn(user: authTypes.userBody ){
+
+async function signIn(user: authTypes.signInSchema ){
   if(!user.email || !user.password) throw notFoundError("requires email and password");
 
   const userExist = await authenticationRepositories.findUser(user.email);
   
-  if(!userExist) throw conflictError("Incorrect email or password");
+  if(!userExist) throw conflictError("Email or password is invalid");
 
   const password = cryptoUtils.checkPassword(user.password, userExist.password);
 
-  if(!password) throw unauthorizedError("incorrect email or password");
+  if(!password) throw unauthorizedError("Email or password is invalid");
 
   const token = utilsToken.generateToken(userExist);
-
-  return token
+  return {
+    user: exclude(userExist, "password"),
+    token,
+  };
 };
 
 const authenticationService = {

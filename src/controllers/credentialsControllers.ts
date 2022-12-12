@@ -11,7 +11,7 @@ try{
       const result = await credentialsService.createCredentials(user.id, credentials);
 
       return res.status(httpStatus.OK).send(result);
-    } catch(error: any) {
+    } catch(error) {
       if(error.type === "error_not_found"){
         return res.status(httpStatus.NOT_FOUND).send(error.message);
       }
@@ -30,7 +30,7 @@ export async function getAllCredentials(req: Request, res: Response) {
     const allCredentials = await credentialsService.allCredentials(user.id);
 
     res.status(httpStatus.OK).send(allCredentials);
-  } catch (error: any) {
+  } catch (error) {
     if(error.type === "error_not_found"){
       return res.status(httpStatus.NOT_FOUND).send(error.message);
     }
@@ -47,7 +47,7 @@ export async function getCredentialById(req: Request, res: Response) {
     const credential = await credentialsService.fetchCredentialById(user.id, id)
 
     res.status(200).send(credential);
-  } catch (error: any) {
+  } catch (error) {
     if(error.type === "error_not_found"){
       return res.status(httpStatus.NOT_FOUND).send(error.message);
     }
@@ -65,7 +65,7 @@ export async function deleteCredentialById(req: Request, res: Response) {
     await credentialsService.deleteCredential(user.id, id)
 
     res.status(httpStatus.OK).send("Credencial Deleted");
-  } catch (error: any) {
+  } catch (error) {
     if(error.type === "error_not_found"){
       return res.status(httpStatus.NOT_FOUND).send(error.message);
     }

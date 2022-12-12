@@ -16,8 +16,14 @@ return prisma.user.create({
 }
 
 async function findUser(email: string) {
+
  return prisma.user.findUnique({
-  where:{ email }
+  where:{ email },
+  select: {
+    id: true,
+    email: true,
+    password: true,
+  }
 })
 };
 
