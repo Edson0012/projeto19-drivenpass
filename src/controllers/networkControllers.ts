@@ -9,7 +9,7 @@ export async function postRegisterWifi(req: Request, res:Response) {
     
     try{
 
-        await networkServices.registerWifi(wifiData, user.id);
+        await networkServices.registerWifi(wifiData, user.userLd);
 
         return res.status(httpStatus.OK).send("created");
 
@@ -28,7 +28,7 @@ export async function getAllNetworks(req: Request, res: Response){
 
     try{
 
-        const allWiFi = await networkServices.allWiFi(user.id)
+        const allWiFi = await networkServices.allWiFi(user.userId)
 
         return res.status(httpStatus.OK).send(allWiFi);
 
@@ -44,10 +44,10 @@ export async function getAllNetworks(req: Request, res: Response){
 
 export async function getNetworksById ( req: Request, res: Response ) {
     const { user } = res.locals;
-    const id = Number(req.params.id);
+    const id = req.params.id;
 
     try{
-        const wirelessById = await networkServices.wirelressById(user.id, id)
+        const wirelessById = await networkServices.wirelressById(user.userId, +id)
 
         return res.status(httpStatus.OK).send(wirelessById)
 
@@ -63,11 +63,11 @@ export async function getNetworksById ( req: Request, res: Response ) {
 
 export async function deleteNetworkByIdAndUserId ( req: Request, res:Response ){
     const { user } = res.locals;
-    const id = Number(req.params.id);
+    const id = req.params.id;
 
     try{
 
-        await networkServices.deleteNetwork(user.id, id);
+        await networkServices.deleteNetwork(user.userId, +id);
 
         return res.status(httpStatus.OK).send("deleted");
 
@@ -81,6 +81,6 @@ export async function deleteNetworkByIdAndUserId ( req: Request, res:Response ){
             return res.status(httpStatus.UNAUTHORIZED).send(error.message);
         }
 
-        res.status(BAD_REQUEST).send(error.message);
+        return res.status(BAD_REQUEST).send(error.message);
     }
 };

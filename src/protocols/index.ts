@@ -14,3 +14,6 @@ export type ApplicationError = {
     name: string;
     message: string;
   };
+
+
+export type Arr = string[]; 

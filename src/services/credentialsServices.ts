@@ -4,55 +4,60 @@ import * as credentialsTypes from "../types/credentialsTypes";
 import cryptrUtils from "../utils/cryptrUtils";
 
 async function createCredentials(userId: number, credentials: credentialsTypes.credentialsData){
-   if(!credentials) throw notFoundError("requires all fields to be submitted");
-
    const titleExist = await credentialsRepositories.findTitleCredentials(credentials.title, userId);
 
    if(titleExist) throw unauthorizedError("you already have a credential with that title");
 
    const hashedPassword = cryptrUtils.returnEncrypt(credentials.password);
 
-   await credentialsRepositories.createCredential(userId, {...credentials, password: hashedPassword});
+   const created = await credentialsRepositories.createCredential(userId, {...credentials, password: hashedPassword});
+
+   return created;
 };
 
 async function allCredentials(userId: number){
-    const userAllCrendentials = await credentialsRepositories.findAllCredentials(userId);
-
-    if(!userAllCrendentials) throw notFoundError("does not have credentials");
-
-    
+  const userAllCrendentials = await credentialsRepositories.findAllCredentials(userId);
+  
   for (let i = 0; i < userAllCrendentials.length; i++) {
-    const credentials = userAllCrendentials[i];
-
-    credentials.password = cryptrUtils.returnDecrypt(credentials.password);
-  }
+       const credentials = userAllCrendentials[i];
+       credentials.password = cryptrUtils.returnDecrypt(credentials.password);
+  }  
 
   return userAllCrendentials;
 };
 
 async function fetchCredentialById(userId: number, id: number) {
-    const credential = await credentialsRepositories.findCredentialByIdAndUserId(userId, id);
-  
-    if(!credential) throw notFoundError("credential not found")
+    const credentialId = await credentialsRepositories.findCredencialById(id);
 
-    const passwordDecrypted = cryptrUtils.returnDecrypt(credential.password)
+    if(!credentialId) throw notFoundError("credential not found");
+
+    if(credentialId.userId !== userId) throw unauthorizedError("the credential belongs to someone else");
+
+    const passwordDecrypted = cryptrUtils.returnDecrypt(credentialId.password)
+
     const credentialById = {
-      ...credential,
+      username: credentialId.username,
+      title: credentialId.title,
+      url: credentialId.url,
       password: passwordDecrypted,
     };
 
     return credentialById
 }
- 
-async function deleteCredential( userId: number, id: number ){
-    if(!id) throw notFoundError("credential not found");
 
+
+async function deleteCredential( userId: number, id: number ){
     const credentialById = await credentialsRepositories.findCredencialById(id);
 
-    if(credentialById?.userId === userId) throw notFoundError("credential not found");
+    console.log(credentialById);
 
+    if(!credentialById) throw notFoundError("credential not found");
 
-    return await credentialsRepositories.deleteCredentialByIdAndUserId(userId, id);
+    if(credentialById.userId !== userId) throw unauthorizedError("this credential does not belong to you");
+
+    const result = await credentialsRepositories.deleteCredentialById(id);
+
+    return result;
 }
 
 const credentialsService = {

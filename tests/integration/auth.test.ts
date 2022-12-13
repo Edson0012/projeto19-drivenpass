@@ -55,7 +55,7 @@ describe("POST /signUp", () => {
             const body = generateValidBody();
     
             const response = await server.post("/signUp").send(body);
-            console.log(response.body);
+            
             expect(response.status).toBe(httpStatus.CREATED);
             expect(response.body).toEqual({
               id: expect.any(Number),

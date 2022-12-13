@@ -32,7 +32,7 @@ async function findCredencialById(id: number) {
 }
 
 async function findAllCredentials(userId: number) {
-  return await prisma.credential.findMany({
+  return prisma.credential.findMany({
     where: { userId },
     select: {
       id: true,
@@ -57,15 +57,10 @@ async function findCredentialByIdAndUserId(userId: number, id: number) {
   });
 }
 
-async function deleteCredentialByIdAndUserId( userId: number, id:number) {
-const credential = {
-  userId,
-  id
-}  
-
-return prisma.credential.delete({
-  where: credential
-})
+async function deleteCredentialById( id: number) { 
+  return prisma.credential.delete({
+    where: { id: id }
+  })
 };
 
 const credentialsRepositories = {
@@ -73,7 +68,7 @@ const credentialsRepositories = {
     createCredential,
     findAllCredentials,
     findCredentialByIdAndUserId,
-    deleteCredentialByIdAndUserId,
+    deleteCredentialById,
     findCredencialById
 }
 
