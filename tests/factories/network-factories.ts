@@ -14,6 +14,14 @@ export function generateValidNetwork (){
     }
 }
 
+export function generateInvalidNetwork (){
+    return {
+        [faker.name.firstName()]: faker.name.firstName(),
+        network: faker.name.firstName(),
+        password: faker.name.firstName(),
+    }
+}
+
 export async function createNetwork(user?: User, network?: NetWorkData) {
     const incomingUser = user || await createUser();
     const incomingNetwork = network || generateValidNetwork();

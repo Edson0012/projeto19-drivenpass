@@ -20,7 +20,6 @@ async function findWiFiByUserId(userId: number){
             id: true,
             title: true,
             network: true,
-            password: true,
         }
     })
 }
@@ -32,7 +31,6 @@ async function findWiFiById(id: number){
             id: true,
             title: true,
             network: true,
-            password: true,
             userId: true,
         }
     })

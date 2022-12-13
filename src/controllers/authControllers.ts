@@ -15,15 +15,9 @@ export async function singUpPost(req: Request, res: Response) {
       });
     } catch (error) {
 
-      if(error.type === "error_not_found"){
-        return res.status(httpStatus.NOT_FOUND).send(error.message);
-      }
-
       if(error.type === "error_unauthorized"){
         return res.status(httpStatus.CONFLICT).send(error.message);
       }
-
-      return res.status(httpStatus.BAD_REQUEST).send(error.message);
     }
 }
 
@@ -36,10 +30,6 @@ export async function signInPost(req: Request, res: Response){
     return res.status(httpStatus.OK).send(result);
   } catch (error) {
 
-    if(error.type === "error_not_found"){
-      return res.status(httpStatus.NOT_FOUND).send(error.message);
-    }
-
     if(error.type === "error_unauthorized"){
       return res.status(httpStatus.UNAUTHORIZED).send(error.message);
     }
@@ -47,8 +37,5 @@ export async function signInPost(req: Request, res: Response){
     if(error.type === "error_conflict"){
       return res.status(httpStatus.CONFLICT).send(error.message);
     }
-
-
-    return res.status(httpStatus.BAD_REQUEST).send(error.message);
   }
 }

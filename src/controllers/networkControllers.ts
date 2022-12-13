@@ -9,36 +9,27 @@ export async function postRegisterWifi(req: Request, res:Response) {
     
     try{
 
-        await networkServices.registerWifi(wifiData, user.userLd);
+        const wireless = await networkServices.registerWifi(wifiData, user.userId);
 
-        return res.status(httpStatus.OK).send("created");
+        return res.status(httpStatus.OK).send(wireless);
 
     }catch (error){
 
-        if(error.type === "error_conflict"){
-            return res.status(httpStatus.CONFLICT).send(error.message);
-        }
-
-        return res.status(httpStatus.BAD_REQUEST).send(error.message);
+        return res.status(httpStatus.NOT_FOUND).send(error);
     }
-}
+};
 
 export async function getAllNetworks(req: Request, res: Response){
     const { user } = res.locals;
 
     try{
 
-        const allWiFi = await networkServices.allWiFi(user.userId)
+        const allWireless = await networkServices.allWiFi(user.userId)
 
-        return res.status(httpStatus.OK).send(allWiFi);
+        return res.status(httpStatus.OK).send(allWireless);
 
     }catch (error) {
-
-        if(error.type === "error_not_found"){
-            return res.status(httpStatus.NOT_FOUND).send(error.message);
-        }
-    
-        return res.status(BAD_REQUEST).send(error.message);
+        return res.sendStatus(httpStatus.NOT_FOUND);
     }
 };
 
@@ -57,7 +48,9 @@ export async function getNetworksById ( req: Request, res: Response ) {
             return res.status(httpStatus.NOT_FOUND).send(error.message);
         }
 
-        return res.status(BAD_REQUEST).send(error.message);
+        if(error.type === "error_unauthorized"){
+            return res.status(httpStatus.UNAUTHORIZED).send(error.message);
+        }
     }
 }
 
@@ -77,10 +70,8 @@ export async function deleteNetworkByIdAndUserId ( req: Request, res:Response ){
             return res.status(httpStatus.NOT_FOUND).send(error.message);
         }
     
-          if(error.type === "error_unauthorized"){
+        if(error.type === "error_unauthorized"){
             return res.status(httpStatus.UNAUTHORIZED).send(error.message);
         }
-
-        return res.status(BAD_REQUEST).send(error.message);
     }
 };

@@ -39,7 +39,6 @@ async function findAllCredentials(userId: number) {
       url: true,
       title: true,
       username: true,
-      password: true,
     },
   });
 }

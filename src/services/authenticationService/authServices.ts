@@ -18,15 +18,12 @@ async function signUp(email: string, password: string){
 
 
 async function signIn(user: authTypes.signInSchema ){
-  if(!user.email || !user.password) throw notFoundError("requires email and password");
 
   const userExist = await authenticationRepositories.findUser(user.email);
   
   if(!userExist) throw conflictError("Email or password is invalid");
 
-  const password = cryptoUtils.checkPassword(user.password, userExist.password);
-
-  if(!password) throw unauthorizedError("Email or password is invalid");
+  cryptoUtils.checkPassword(user.password, userExist.password);
 
   const token = utilsToken.generateToken(userExist);
   return {

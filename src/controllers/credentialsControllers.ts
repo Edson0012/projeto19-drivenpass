@@ -12,12 +12,9 @@ try{
       return res.status(httpStatus.OK).send(result);
 
     } catch(error) {
-
       if(error.type === "error_unauthorized"){
         return res.status(httpStatus.UNAUTHORIZED).send(error.message);
       }
-
-      return res.status(httpStatus.BAD_REQUEST).send(error.message);
     }
 }
 
@@ -29,15 +26,14 @@ export async function getAllCredentials(req: Request, res: Response) {
 
     return res.status(httpStatus.OK).send(allCredentials);
   } catch (error) {
-    console.log(error);
-    return res.status(httpStatus.BAD_REQUEST).send(error.message);
+    return res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
 
 export async function getCredentialById(req: Request, res: Response) {
   const id = req.params.id
   const { user } = res.locals;
-  console.log(user);
+
   try {
     const credential = await credentialsService.fetchCredentialById(user.userId, +id)
 
@@ -51,19 +47,16 @@ export async function getCredentialById(req: Request, res: Response) {
     if(error.type === "error_unauthorized"){
       return res.status(httpStatus.UNAUTHORIZED).send(error.message);
     }
-
-    return res.status(httpStatus.BAD_REQUEST).send(error.message);
   }
 }
 
 export async function deleteCredentialById(req: Request, res: Response) {
   const id = req.params.id;
   const { user } = res.locals;
-  console.log(user);
-  console.log(id);
+
   try {
     
-    const result = await credentialsService.deleteCredential(user.userId, +id)
+    await credentialsService.deleteCredential(user.userId, +id)
 
     return res.status(httpStatus.OK).send("deleted");
   } catch (error) {
@@ -74,7 +67,5 @@ export async function deleteCredentialById(req: Request, res: Response) {
     if(error.type === "error_unauthorized"){
       return res.status(httpStatus.UNAUTHORIZED).send(error.message);
     }
-
-    return res.status(httpStatus.BAD_REQUEST).send(error.message);
   }
 }

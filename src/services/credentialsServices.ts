@@ -18,11 +18,6 @@ async function createCredentials(userId: number, credentials: credentialsTypes.c
 async function allCredentials(userId: number){
   const userAllCrendentials = await credentialsRepositories.findAllCredentials(userId);
   
-  for (let i = 0; i < userAllCrendentials.length; i++) {
-       const credentials = userAllCrendentials[i];
-       credentials.password = cryptrUtils.returnDecrypt(credentials.password);
-  }  
-
   return userAllCrendentials;
 };
 
@@ -33,13 +28,11 @@ async function fetchCredentialById(userId: number, id: number) {
 
     if(credentialId.userId !== userId) throw unauthorizedError("the credential belongs to someone else");
 
-    const passwordDecrypted = cryptrUtils.returnDecrypt(credentialId.password)
-
     const credentialById = {
       username: credentialId.username,
       title: credentialId.title,
       url: credentialId.url,
-      password: passwordDecrypted,
+      password: credentialId.password,
     };
 
     return credentialById
@@ -48,8 +41,6 @@ async function fetchCredentialById(userId: number, id: number) {
 
 async function deleteCredential( userId: number, id: number ){
     const credentialById = await credentialsRepositories.findCredencialById(id);
-
-    console.log(credentialById);
 
     if(!credentialById) throw notFoundError("credential not found");
 

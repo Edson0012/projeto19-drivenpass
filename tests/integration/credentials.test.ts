@@ -134,7 +134,6 @@ describe("GET /credential", () => {
                 title: credential.title,
                 username: credential.username,
                 url: credential.url,
-                password: newCredential.password,
             }]))
         }) 
       }) 
@@ -203,7 +202,6 @@ describe("GET /credential/:id", () => {
                 title: credential.title,
                 username: credential.username,
                 url: credential.url,
-                password: newCredential.password
             }));
         });
     });
