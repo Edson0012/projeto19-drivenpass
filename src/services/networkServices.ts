@@ -14,9 +14,7 @@ async function registerWifi(wifiData: networkTypes.NetworkBody, userId: number) 
         title: wireless.title,
         network: wireless.network
     }
-
-    if(!wirelressInfo) throw notFoundError("not found");
-
+    
     return wirelressInfo;
 }
 

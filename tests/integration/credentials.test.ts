@@ -134,6 +134,7 @@ describe("GET /credential", () => {
                 title: credential.title,
                 username: credential.username,
                 url: credential.url,
+                password: newCredential.password,
             }]))
         }) 
       }) 

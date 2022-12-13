@@ -20,6 +20,7 @@ async function findWiFiByUserId(userId: number){
             id: true,
             title: true,
             network: true,
+            password: true,
         }
     })
 }

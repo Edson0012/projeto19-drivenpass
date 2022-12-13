@@ -10,14 +10,19 @@ async function createCredentials(userId: number, credentials: credentialsTypes.c
 
    const hashedPassword = cryptrUtils.returnEncrypt(credentials.password);
 
-   const created = await credentialsRepositories.createCredential(userId, {...credentials, password: hashedPassword});
+   return await credentialsRepositories.createCredential(userId, {...credentials, password: hashedPassword});
 
-   return created;
 };
 
 async function allCredentials(userId: number){
   const userAllCrendentials = await credentialsRepositories.findAllCredentials(userId);
   
+  for (let i = 0; i < userAllCrendentials.length; i++) {
+    const credentials = userAllCrendentials[i];
+
+    credentials.password = cryptrUtils.returnDecrypt(credentials.password);
+  }
+
   return userAllCrendentials;
 };
 
